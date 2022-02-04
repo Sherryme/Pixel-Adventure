@@ -11,21 +11,24 @@
  * @link http://www.workerman.net/
  * @license http://www.opensource.org/licenses/mit-license.php MIT License
  */
-use \Workerman\Worker;
-use \Server\Utils;
-use \Server\Player;
-use \Server\WorldServer;
+
+use Workerman\Worker;
+use Server\Server;
+use Server\Utils;
+use Server\Player;
+use Server\WorldServer;
 
 // 自动加载类
 require_once __DIR__ . '/vendor/autoload.php';
 
 // BrowserQuest Server
-$ws_worker = new Worker('Websocket://0.0.0.0:8000');
+$_config = json_decode(file_get_contents(__DIR__ . '/config.json'), true);
+$ws_worker = new Worker('websocket://0.0.0.0:'.$_config['port']);
 $ws_worker->name = 'BrowserQuestWorker';
+$ws_worker->config = $_config;
 $ws_worker->onWorkerStart = function($ws_worker)
 {
-    $ws_worker->server = new \Server\Server();
-    $ws_worker->config = json_decode(file_get_contents(__DIR__ . '/config.json'), true);
+    $ws_worker->server = new Server();
     $ws_worker->worlds = array();
     
     foreach(range(0, $ws_worker->config['nb_worlds']-1) as $i)
@@ -54,7 +57,4 @@ $ws_worker->onConnect = function($connection) use ($ws_worker)
     }
 };
 
-if(!defined('GLOBAL_START'))
-{
-    Worker::runAll();
-}
+Worker::runAll();

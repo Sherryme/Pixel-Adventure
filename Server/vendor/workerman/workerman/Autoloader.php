@@ -52,7 +52,7 @@ class Autoloader
                 $class_file = self::$_autoloadRootPath . DIRECTORY_SEPARATOR . $class_path . '.php';
             }
             if (empty($class_file) || !is_file($class_file)) {
-                $class_file = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . "$class_path.php";
+                $class_file = __DIR__ . DIRECTORY_SEPARATOR;
             }
         }
 
