@@ -21,7 +21,7 @@ The Chinese version of BrowserQuest-PHP
 6. `docker-compose build`
 7. `docker-compose up -d`
 8. 将`Ngnix`的网站目录指向`Web`目录
-9. 配置`Nginx`反向代理，将 `ws://exsample/ws` 指向 Docker 容器开放的 websocket 服务，如`http://172.17.0.2/`
+9. 配置`Nginx`反向代理，将 `ws://example/ws` 指向 Docker 容器开放的 websocket 服务，如`http://172.17.0.2/`
    ```text
    #PROXY-START/ws
    
