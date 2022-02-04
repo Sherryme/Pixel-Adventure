@@ -1,0 +1,10 @@
+version: "3"
+services:
+  server:
+    container_name: "Pixel-Adventure_Server"
+    build: "./Server"
+    expose:
+      - "80"
+    volumes:
+      - "./Server:/home/Pixel-Adventure_Server"
+    command: "php /home/Pixel-Adventure_Server/worker.php start"

@@ -2,10 +2,9 @@
 define(['player', 'entityfactory', 'lib/bison'], function(Player, EntityFactory, BISON) {
 
     var GameClient = Class.extend({
-        init: function(host, port) {
+        init: function(ws_url) {
             this.connection = null;
-            this.host = host;
-            this.port = port;
+            this.ws_url = ws_url;
     
             this.connected_callback = null;
             this.spawn_callback = null;
@@ -45,15 +44,14 @@ define(['player', 'entityfactory', 'lib/bison'], function(Player, EntityFactory,
         },
         
         connect: function(dispatcherMode) {
-            var url = "ws://"+ this.host +":"+ this.port +"/",
-                self = this;
+            var self = this;
             
-            log.info("Trying to connect to server : "+url);
+            log.info("Trying to connect to server : "+self.ws_url);
 
             if(window.MozWebSocket) {
-                this.connection = new MozWebSocket(url);
+                this.connection = new MozWebSocket(self.ws_url);
             } else {
-                this.connection = new WebSocket(url);
+                this.connection = new WebSocket(self.ws_url);
             }
             
             if(dispatcherMode) {
@@ -61,7 +59,7 @@ define(['player', 'entityfactory', 'lib/bison'], function(Player, EntityFactory,
                     var reply = JSON.parse(e.data);
 
                     if(reply.status === 'OK') {
-                        self.dispatched_callback(reply.host, reply.port);
+                        self.dispatched_callback(reply.host, reply.port); // TODO: 转换 ip:port 为 url
                     } else if(reply.status === 'FULL') {
                         alert("BrowserQuest is currently at maximum player population. Please retry later.");
                     } else {
@@ -70,7 +68,7 @@ define(['player', 'entityfactory', 'lib/bison'], function(Player, EntityFactory,
                 };
             } else {
                 this.connection.onopen = function(e) {
-                    log.info("Connected to server "+self.host+":"+self.port);
+                    log.info("Connected to server "+self.ws_url);
                 };
 
                 this.connection.onmessage = function(e) {

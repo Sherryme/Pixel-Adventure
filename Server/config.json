@@ -1,0 +1,6 @@
+{
+    "port": 80,
+    "nb_players_per_world": 1000,
+    "nb_worlds": 1,
+    "map_filepath": "./Maps/world_server.json"
+}

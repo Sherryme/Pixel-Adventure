@@ -86,25 +86,11 @@ define(['jquery', 'storage'], function($, Storage) {
                 firstTimePlaying = !self.storage.hasAlreadyPlayed();
             
             if(username && !this.game.started) {
-                var optionsSet = false,
-                    config = this.config;
+                var config = this.config;
 
-                //>>includeStart("devHost", pragmas.devHost);
-                if(config.local) {
-                    log.debug("Starting game with local dev config.");
-                    this.game.setServerOptions(config.local.host, config.local.port, username);
-                } else {
-                    log.debug("Starting game with default dev config.");
-                    this.game.setServerOptions(config.dev.host, config.dev.port, username);
-                }
-                optionsSet = true;
-                //>>includeEnd("devHost");
-                
                 //>>includeStart("prodHost", pragmas.prodHost);
-                if(!optionsSet) {
-                    log.debug("Starting game with build config.");
-                    this.game.setServerOptions(config.build.host, config.build.port, username);
-                }
+                log.debug("Starting game with build config.");
+                this.game.setServerOptions(config.ws_url, username);
                 //>>includeEnd("prodHost");
 
                 this.center();

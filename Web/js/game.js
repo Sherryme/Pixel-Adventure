@@ -1,7 +1,7 @@
 
 define(['infomanager', 'bubble', 'renderer', 'map', 'animation', 'sprite', 'tile',
         'warrior', 'gameclient', 'audio', 'updater', 'transition', 'pathfinder',
-        'item', 'mob', 'npc', 'player', 'character', 'chest', 'mobs', 'exceptions', 'config', '../../shared/js/gametypes'],
+        'item', 'mob', 'npc', 'player', 'character', 'chest', 'mobs', 'exceptions', 'config', 'gametypes'],
 function(InfoManager, BubbleManager, Renderer, Map, Animation, Sprite, AnimatedTile,
          Warrior, GameClient, AudioManager, Updater, Transition, Pathfinder,
          Item, Mob, Npc, Player, Character, Chest, Mobs, Exceptions, config) {
@@ -609,9 +609,8 @@ function(InfoManager, BubbleManager, Renderer, Map, Animation, Sprite, AnimatedT
             }
         },
     
-        setServerOptions: function(host, port, username) {
-            this.host = host;
-            this.port = port;
+        setServerOptions: function(ws_url, username) {
+            this.ws_url = ws_url;
             this.username = username;
         },
     
@@ -714,10 +713,10 @@ function(InfoManager, BubbleManager, Renderer, Map, Animation, Sprite, AnimatedT
             var self = this,
                 connecting = false; // always in dispatcher mode in the build version
     
-            this.client = new GameClient(this.host, this.port);
+            this.client = new GameClient(this.ws_url);
             
             //>>excludeStart("prodHost", pragmas.prodHost);
-            var config = this.app.config.local || this.app.config.dev;
+            var config = this.app.config;
             if(config) {
                 this.client.connect(config.dispatcher); // false if the client connects directly to a game server
                 connecting = true;
@@ -730,7 +729,7 @@ function(InfoManager, BubbleManager, Renderer, Map, Animation, Sprite, AnimatedT
             }
             //>>includeEnd("prodHost");
             
-            this.client.onDispatched(function(host, port) {
+            this.client.onDispatched(function(host, port) {  // TODO: 转换 ip:port 为 url
                 log.debug("Dispatched to game server "+host+ ":"+port);
                 
                 self.client.host = host;

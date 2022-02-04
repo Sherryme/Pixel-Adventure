@@ -1,20 +1,7 @@
-
-define(['text!../config/config_build.json'],
-function(build) {
+define(function() {
     var config = {
-        dev: { host: "localhost", port: 8000, dispatcher: false },
-        build: JSON.parse(build)
+        ws_url: "ws://localhost/Pixel-Adventure/ws",
+        dispatcher: false  // 开启则由入口服务器牵引至真实服务器地址，可实现负载均衡
     };
-    
-    //>>excludeStart("prodHost", pragmas.prodHost);
-    require(['text!../config/config_local.json'], function(local) {
-        try {
-            config.local = JSON.parse(local);
-        } catch(e) {
-            // Exception triggered when config_local.json does not exist. Nothing to do here.
-        }
-    });
-    //>>excludeEnd("prodHost");
-    
     return config;
 });
